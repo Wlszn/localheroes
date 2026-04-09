@@ -16,18 +16,23 @@ class Bottomnavigation extends StatelessWidget {
     return BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+          icon: Icon(Icons.map_outlined),
+          label: 'Find Heroes',
           backgroundColor: Colors.blueAccent,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+          icon: Icon(Icons.list),
+          label: 'My Jobs',
           backgroundColor: Colors.blueAccent,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
+          icon: Icon(Icons.notifications_none),
+          label: 'Messages',
+          backgroundColor: Colors.blueAccent,
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.map_outlined),
+          label: 'Profile',
           backgroundColor: Colors.blueAccent,
         ),
       ],

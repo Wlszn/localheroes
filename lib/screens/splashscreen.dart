@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'mainScreen.dart';
+import 'roleScreen.dart';
 //Code for Splash screen
 
 class Splashscreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class _SplashscreenState extends State<Splashscreen> {
     return Center(
       child: SplashScreen(
         seconds: 5,
-        navigateAfterSeconds: MainScreen(),
+        navigateAfterSeconds: Rolescreen(),
         title: Text(''),
         backgroundColor: Colors.blueAccent,
         image: Image.asset('assets/logo.png'),
