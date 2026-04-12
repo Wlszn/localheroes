@@ -1,17 +1,19 @@
+enum Status { open, assigned, completed, cancelled }
+
 class TasksModel {
   final int taskId;
-  final int userId;
+  final int seekerId;
   final int categoryId;
   final String title;
   final String description;
   final String location;
   final double price;
-  final String status;
+  final Status status;
   final DateTime createdAt;
 
   TasksModel({
     required this.taskId,
-    required this.userId,
+    required this.seekerId,
     required this.categoryId,
     required this.title,
     required this.description,
@@ -23,6 +25,6 @@ class TasksModel {
 
   @override
   String toString() {
-    return 'TasksModel{taskId: $taskId, userId: $userId, categoryId: $categoryId, title: $title, description: $description, location: $location, price: $price, status: $status, createdAt: $createdAt}';
+    return 'TasksModel{taskId: $taskId, seekerId: $seekerId, categoryId: $categoryId, title: $title, description: $description, location: $location, price: $price, status: $status, createdAt: $createdAt}';
   }
 }

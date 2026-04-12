@@ -1,6 +1,6 @@
 class AdminLogsModel {
   final int logId;
-  final int userId;
+  final int adminId;
   final String action;
   final String targetUser;
   final String description;
@@ -8,7 +8,7 @@ class AdminLogsModel {
 
   AdminLogsModel({
     required this.logId,
-    required this.userId,
+    required this.adminId,
     required this.action,
     required this.targetUser,
     required this.description,
@@ -17,6 +17,6 @@ class AdminLogsModel {
 
   @override
   String toString() {
-    return 'AdminLogsModel{logId: $logId, userId: $userId, action: $action, targetUser: $targetUser, description: $description, date: $date}';
+    return 'AdminLogsModel{logId: $logId, adminId: $adminId, action: $action, targetUser: $targetUser, description: $description, date: $date}';
   }
 }
