@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'register_screen.dart';
+import 'login_screen.dart';
+import '../Models/user_model.dart';
 
 class Rolescreen extends StatelessWidget {
   const Rolescreen({super.key});
@@ -14,6 +16,7 @@ class Rolescreen extends StatelessWidget {
         ),
         centerTitle: true,
         backgroundColor: Colors.blue[300],
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         children: [
@@ -45,7 +48,7 @@ class Rolescreen extends StatelessWidget {
                     Row(
                       children: [
                         TextButton(onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Registerscreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(selectedRole: Role.seeker)));
                         }, child: Text('Continue as Seeker->', style: TextStyle(color: Colors.blue[300]),))
                       ],
                     )
@@ -81,7 +84,7 @@ class Rolescreen extends StatelessWidget {
                     Row(
                       children: [
                         TextButton(onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Registerscreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(selectedRole: Role.hero)));
                         }, child: Text('Continue as Hero->', style: TextStyle(color: Colors.pink[300]),))
                       ],
                     )
