@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:localheroes/widgets/bottomNavigation.dart';
-import 'homeScreen.dart';
-import 'profileScreen.dart';
-import 'taskScreen.dart';
-import 'package:localheroes/widgets/NavigationDrawer.dart';
+import 'package:localheroes/widgets/bottom_navigation.dart';
+import 'home_screen.dart';
+import 'profile_screen.dart';
+import 'task_screen.dart';
+import 'package:localheroes/widgets/navigation_drawer.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
