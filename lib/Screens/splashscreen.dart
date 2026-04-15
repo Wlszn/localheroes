@@ -3,6 +3,7 @@ import 'package:splashscreen/splashscreen.dart';
 import 'main_screen.dart';
 import 'role_screen.dart';
 import 'register_screen.dart';
+import 'login_screen.dart';
 //Code for Splash screen
 
 class Splashscreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _SplashscreenState extends State<Splashscreen> {
     return Center(
       child: SplashScreen(
         seconds: 5,
-        navigateAfterSeconds: Registerscreen(),
+        navigateAfterSeconds: Rolescreen(),
         title: Text(''),
         backgroundColor: Colors.blueAccent,
         image: Image.asset('assets/logo.png'),
