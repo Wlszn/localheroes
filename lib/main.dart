@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localheroes/Screens/profile_screen.dart';
 //import 'package:localheroes/DBConnection/dbconnection.dart';
 import 'package:localheroes/screens/splashscreen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const Splashscreen(),
+      home: const Profilescreen(),
     );
   }
 }
