@@ -14,7 +14,6 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF3F4FB),
-
       body: Column(
         children: [
           Container(
@@ -30,10 +29,10 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
+                        children: [
                           Text(
                             'Find Heroes',
                             style: TextStyle(
@@ -63,27 +62,25 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
                         ],
                       ),
                     ),
-
-                    Row(
-                      children: const [
-                        Icon(
-                          Icons.notifications_none_outlined,
-                          size: 22,
-                          color: Color(0xFF111827),
-                        ),
-                        SizedBox(width: 18),
-                        Icon(
-                          Icons.person_outline,
-                          size: 22,
-                          color: Color(0xFF111827),
-                        ),
-                      ],
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.notifications_none_outlined,
+                        size: 22,
+                        color: Color(0xFF111827),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.person_outline,
+                        size: 22,
+                        color: Color(0xFF111827),
+                      ),
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 18),
-
                 Row(
                   children: [
                     Expanded(
@@ -109,20 +106,25 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
                         ),
                       ),
                     ),
-
                     const SizedBox(width: 10),
-
-                    Container(
+                    SizedBox(
                       width: 46,
                       height: 46,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: const Color(0xFFE5E7EB)),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(
-                        Icons.format_list_bulleted,
-                        color: Color(0xFF374151),
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          backgroundColor: Colors.white,
+                          side: const BorderSide(color: Color(0xFFE5E7EB)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.format_list_bulleted,
+                          color: Color(0xFF374151),
+                          size: 20,
+                        ),
                       ),
                     ),
                   ],
@@ -130,7 +132,6 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
               ],
             ),
           ),
-
           Expanded(
             child: Container(
               width: double.infinity,
@@ -177,7 +178,6 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
           ),
         ],
       ),
-
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: (index) {
