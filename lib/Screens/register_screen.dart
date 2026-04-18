@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'role_screen.dart';
 import '../Controllers/auth.dart';
@@ -5,9 +6,9 @@ import '../Models/user_model.dart';
 import 'login_screen.dart';
 
 class Registerscreen extends StatefulWidget {
-  const Registerscreen({super.key, required this.selectedRole, });
-  final Role selectedRole;
+  const Registerscreen({super.key, required this.selectedRole});
 
+  final Role selectedRole;
 
   @override
   State<Registerscreen> createState() => _RegisterscreenState();
@@ -19,11 +20,10 @@ class _RegisterscreenState extends State<Registerscreen> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+
   //Firebase auth requires password to be atleast 6 characters
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-
-
 
   bool isLoading = false;
 
@@ -46,6 +46,10 @@ class _RegisterscreenState extends State<Registerscreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('User Created: ${user?.name}')));
+
+      _nameController.clear();
+      _emailController.clear();
+      _passwordController.clear();
     } catch (e) {
       if (!mounted) return;
 
@@ -63,70 +67,127 @@ class _RegisterscreenState extends State<Registerscreen> {
   @override
   Widget build(BuildContext context) {
     String roleText = widget.selectedRole == Role.seeker ? 'Seeker' : 'Hero';
-    return  Scaffold(
-        appBar: AppBar(automaticallyImplyLeading: false,
-        ),
-        body: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.symmetric(horizontal: 30),
-                    child:    Card(
-                      child: Padding(
-                        padding: EdgeInsets.all(25),
-                        child: Column(
-                          children: [
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset('assets/minilogo.png')
-                                ]
-                            ),
-                            SizedBox(height: 20,),
-                            Text('Create Account', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,)),
-                            Text('Sign up as $roleText'),
-                            SizedBox(height: 20,),
-                            TextField(
-                              controller: _nameController,
-                              decoration: const InputDecoration(labelText: 'Full Name'),
-                            ),
-                            TextField(
-                              controller: _emailController,
-                              decoration: const InputDecoration(labelText: 'Email'),
-                            ),
-                            TextField(
-                              controller: _passwordController,
-                              obscureText: true,
-                              decoration: const InputDecoration(labelText: 'Password'),
-                            ),
-                            SizedBox(height: 10,),
-                            ElevatedButton(onPressed: (){
-                              isLoading ? null : register();
-                            }, child: Text('Create Account'),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text('Already have an account?'),
-                                TextButton(onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen(selectedRole: widget.selectedRole,)));
-                                }, child: Text('Sign in', style: TextStyle(color: Colors.blue[800]),))
-                              ],
-                            ),
-                            TextButton(onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => Rolescreen()));
-                            }, child: isLoading ?
-                            const CircularProgressIndicator()
-                                : const Text('<- Back to role selection',))
-                          ],
+    return Scaffold(
+      appBar: AppBar(automaticallyImplyLeading: false),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.symmetric(horizontal: 30),
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsets.all(25),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [Image.asset('assets/minilogo.png')],
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Create Account',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
                         ),
                       ),
-                    ),
+                      Text(
+                        'Sign up as $roleText',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      SizedBox(height: 20),
+                      TextField(
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(CupertinoIcons.person),
+                          labelText: 'Full Name',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      TextField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.email_outlined),
+                          labelText: 'Email',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.lock_outline),
+                          labelText: 'Password',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            isLoading ? null : register();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF5C7CFF),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: Text('Create Account'),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Already have an account?'),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(
+                                    selectedRole: widget.selectedRole,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'Sign in',
+                              style: TextStyle(color: Colors.blue[800]),
+                            ),
+                          ),
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Rolescreen(),
+                            ),
+                          );
+                        },
+                        child: isLoading
+                            ? const CircularProgressIndicator()
+                            : const Text(
+                                '<- Back to role selection',
+                                style: TextStyle(color: Colors.black54),
+                              ),
+                      ),
+                    ],
                   ),
-                ]
-            )
-        )
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
