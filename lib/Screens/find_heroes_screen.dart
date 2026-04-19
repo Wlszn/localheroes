@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localheroes/Screens/job_list_screen.dart';
 
 class FindHeroesScreen extends StatefulWidget {
   const FindHeroesScreen({super.key});
@@ -181,9 +182,13 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
         onTap: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
+          if (index == 1) {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => JobListScreen()));
+          } else {
+            setState(() {
+              selectedIndex = index;
+            });
+          }
         },
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,

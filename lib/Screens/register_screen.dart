@@ -105,7 +105,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                           border: OutlineInputBorder(),
                         ),
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(height: 14),
                       TextField(
                         controller: _emailController,
                         decoration: InputDecoration(
@@ -114,7 +114,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                           border: OutlineInputBorder(),
                         ),
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(height: 14),
                       TextField(
                         controller: _passwordController,
                         obscureText: true,
@@ -164,22 +164,21 @@ class _RegisterscreenState extends State<Registerscreen> {
                           ),
                         ],
                       ),
-                      TextButton(
+                      TextButton.icon(
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => Rolescreen(),
-                            ),
+                            MaterialPageRoute(builder: (context) => Rolescreen()),
                           );
                         },
-                        child: isLoading
+                        icon: Icon(Icons.arrow_back, color: Colors.black54),
+                        label: isLoading
                             ? const CircularProgressIndicator()
-                            : const Text(
-                                '<- Back to role selection',
-                                style: TextStyle(color: Colors.black54),
-                              ),
-                      ),
+                            : Text(
+                          'Back to role selection',
+                          style: TextStyle(color: Colors.black54),
+                        ),
+                      )
                     ],
                   ),
                 ),

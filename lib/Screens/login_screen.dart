@@ -42,7 +42,10 @@ class _LoginScreenState extends State<LoginScreen> {
       _passwordController.clear();
 
       if (widget.selectedRole == Role.seeker) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => FindHeroesScreen()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FindHeroesScreen()),
+        );
       }
     } catch (e) {
       if (!mounted) return;
@@ -94,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           border: OutlineInputBorder(),
                         ),
                       ),
-                      SizedBox(height: 17),
+                      SizedBox(height: 16),
                       TextField(
                         controller: _passwordController,
                         obscureText: true,
@@ -156,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
-                      TextButton(
+                      TextButton.icon(
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -165,10 +168,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         },
-                        child: isLoading
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.black54,
+                        ),
+                        label: isLoading
                             ? const CircularProgressIndicator()
-                            : const Text(
-                                '<- Back to role selection',
+                            : Text(
+                                'Back to role selection',
                                 style: TextStyle(color: Colors.black54),
                               ),
                       ),

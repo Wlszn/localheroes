@@ -5,6 +5,7 @@ import 'package:localheroes/screens/splashscreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'Screens/find_heroes_screen.dart';
 import 'firebase_options.dart';
+import 'Screens/job_list_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
