@@ -1,0 +1,1 @@
+//Individual chat screen that shows the mesaages of the hero to the seeker

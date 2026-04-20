@@ -1,0 +1,1 @@
+//Settings screen that allows the user to change various settings in the app.

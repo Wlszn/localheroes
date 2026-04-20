@@ -1,0 +1,1 @@
+//Screen that handles notification system that the user receives
