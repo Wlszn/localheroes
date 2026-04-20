@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'role_screen.dart';
-import '../Controllers/auth_controller.dart';
-import '../Models/user_model.dart';
+import '../../Controllers/auth_controller.dart';
+import '../../Models/user_model.dart';
 import 'login_screen.dart';
 
 class Registerscreen extends StatefulWidget {

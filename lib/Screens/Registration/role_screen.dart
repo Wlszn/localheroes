@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'register_screen.dart';
 import 'login_screen.dart';
-import '../Models/user_model.dart';
+import '../../Models/user_model.dart';
 
 class Rolescreen extends StatelessWidget {
   const Rolescreen({super.key});

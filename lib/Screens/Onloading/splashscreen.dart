@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
-import 'main_screen.dart';
-import 'role_screen.dart';
-import 'register_screen.dart';
-import 'login_screen.dart';
+import '../main_screen.dart';
+import '../Registration/role_screen.dart';
+import '../Registration/register_screen.dart';
+import '../Registration/login_screen.dart';
 import 'find_screen.dart';
 //Code for Splash screen
 

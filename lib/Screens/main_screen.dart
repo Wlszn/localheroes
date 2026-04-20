@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:localheroes/widgets/bottom_navigation.dart';
-import 'home_screen.dart';
-import 'profile_screen.dart';
-import 'task_screen.dart';
-import 'package:localheroes/widgets/navigation_drawer.dart';
+import '/widgets/bottom_navigation.dart';
+import '/widgets/navigation_drawer.dart';
+import 'job_list_screen.dart';
+import 'find_heroes_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,9 +16,8 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = const [
-    Homescreen(),
-    Profilescreen(),
-    Taskscreen(),
+    FindHeroesScreen(),
+    JobListScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -31,9 +29,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
-      ),
       body:
       _pages[_selectedIndex],
       bottomNavigationBar: Bottomnavigation(
