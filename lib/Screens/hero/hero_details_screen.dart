@@ -1,0 +1,1 @@
+//Screen that shows the details of the hero

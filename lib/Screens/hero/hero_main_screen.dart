@@ -3,6 +3,8 @@ import '../seeker/seeker_tasklist_screen.dart';
 import '../../Widgets/hero_bottom_navigation.dart';
 import 'find_tasks_page.dart';
 
+//Main screen that handles the navigation of the hero side of the app
+
 class HeroMainScreen extends StatefulWidget {
   const HeroMainScreen({super.key});
 
@@ -15,7 +17,7 @@ class _HeroMainScreenState extends State<HeroMainScreen> {
 
   final List<Widget> _pages = const [
     FindTasksScreen(),
-    JobListScreen(),
+    TaskListScreen(),
 
 
   ];

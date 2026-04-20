@@ -6,6 +6,8 @@ import '../../Models/user_model.dart';
 import 'register_screen.dart';
 import '../seeker/seeker_main_screen.dart';
 
+//Screen that handles the login form
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.selectedRole});
 
@@ -132,7 +134,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: isLoading ? null : login,
-                          child: Text('Sign in'),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFF5C7CFF),
                             foregroundColor: Colors.white,
@@ -140,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
+                          child: Text('Sign in'),
                         ),
                       ),
                       SizedBox(height: 10),

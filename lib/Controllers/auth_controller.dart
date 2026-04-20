@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../Models/user_model.dart';
 
+//Handles authorization into the app. Login/Registration etc.
 class AuthController {
   //firebase auth instance
   final FirebaseAuth _auth = FirebaseAuth.instance;

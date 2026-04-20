@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '/widgets/seeker_bottom_navigation.dart';
-import '/widgets/navigation_drawer.dart';
 import 'seeker_tasklist_screen.dart';
 import 'find_heroes_screen.dart';
 
+//Main screen for seeker that handles the navigation of all pages
 class SeekerMainScreen extends StatefulWidget {
   const SeekerMainScreen({super.key});
 
@@ -17,7 +17,7 @@ class _MainScreenState extends State<SeekerMainScreen> {
 
   final List<Widget> _pages = const [
     FindHeroesScreen(),
-    JobListScreen(),
+    TaskListScreen(),
   ];
 
   void _onItemTapped(int index) {

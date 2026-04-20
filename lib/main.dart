@@ -7,7 +7,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 //TODO: Easier version of the database, just run firebase login in terminal then login with your google account. After that it will ask you which database, pick the one for the project and that's it.
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  //await DBConnection.connection();
   runApp(const MyApp());
 }
 

@@ -4,14 +4,16 @@ import '../../Controllers/task_controller.dart';
 import '../../Models/task_model.dart';
 import 'post_task_screen.dart';
 
-class JobListScreen extends StatefulWidget {
-  const JobListScreen({super.key});
+//Task list screen that shows all available tasks that the user has made to the system.
+
+class TaskListScreen extends StatefulWidget {
+  const TaskListScreen({super.key});
 
   @override
-  State<JobListScreen> createState() => _JobListScreenState();
+  State<TaskListScreen> createState() => _TaskListScreenState();
 }
 
-class _JobListScreenState extends State<JobListScreen>
+class _TaskListScreenState extends State<TaskListScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final TaskController _taskController = TaskController();
@@ -30,8 +32,8 @@ class _JobListScreenState extends State<JobListScreen>
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<JobModel>>(
-      stream: _taskController.getMyJobs(),
+    return StreamBuilder<List<TaskModel>>(
+      stream: _taskController.getMyTasks(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -41,22 +43,22 @@ class _JobListScreenState extends State<JobListScreen>
           return Center(child: Text('Error: ${snapshot.error}'));
         }
 
-        final allJobs = snapshot.data ?? [];
+        final allTasks = snapshot.data ?? [];
 
-        final openJobs = allJobs
-            .where((job) => job.status == Status.open)
+        final openTasks = allTasks
+            .where((task) => task.status == Status.open)
             .toList();
 
-        final assignedJobs = allJobs
-            .where((job) => job.status == Status.assigned)
+        final assignedTasks = allTasks
+            .where((task) => task.status == Status.assigned)
             .toList();
 
-        final completedJobs = allJobs
-            .where((job) => job.status == Status.completed)
+        final completedTasks = allTasks
+            .where((task) => task.status == Status.completed)
             .toList();
 
-        final cancelledJobs = allJobs
-            .where((job) => job.status == Status.cancelled)
+        final cancelledTasks = allTasks
+            .where((task) => task.status == Status.cancelled)
             .toList();
 
         return Container(
@@ -78,14 +80,14 @@ class _JobListScreenState extends State<JobListScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'My Jobs',
+                          'My Tasks',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
-                          '${allJobs.length} total jobs',
+                          '${allTasks.length} total tasks',
                           style: const TextStyle(color: Colors.black54),
                         ),
                       ],
@@ -96,7 +98,7 @@ class _JobListScreenState extends State<JobListScreen>
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const PostJobScreen(),
+                            builder: (context) => const PostTaskScreen(),
                           ),
                         );
                       },
@@ -107,7 +109,7 @@ class _JobListScreenState extends State<JobListScreen>
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text('Post New Job'),
+                      child: const Text('Post New Task'),
                     ),
                   ],
                 ),
@@ -134,10 +136,10 @@ class _JobListScreenState extends State<JobListScreen>
                     labelColor: Colors.black,
                     unselectedLabelColor: Colors.black54,
                     tabs: [
-                      Tab(text: 'Open (${openJobs.length})'),
-                      Tab(text: 'Assigned (${assignedJobs.length})'),
-                      Tab(text: 'Completed (${completedJobs.length})'),
-                      Tab(text: 'Cancelled (${cancelledJobs.length})'),
+                      Tab(text: 'Open (${openTasks.length})'),
+                      Tab(text: 'Assigned (${assignedTasks.length})'),
+                      Tab(text: 'Completed (${completedTasks.length})'),
+                      Tab(text: 'Cancelled (${cancelledTasks.length})'),
                     ],
                   ),
                 ),
@@ -146,10 +148,10 @@ class _JobListScreenState extends State<JobListScreen>
                 child: TabBarView(
                   controller: _tabController,
                   children: [
-                    _buildJobList(openJobs, 'No open tasks'),
-                    _buildJobList(assignedJobs, 'No assigned tasks'),
-                    _buildJobList(completedJobs, 'No completed tasks'),
-                    _buildJobList(cancelledJobs, 'No cancelled tasks'),
+                    _buildTaskList(openTasks, 'No open tasks'),
+                    _buildTaskList(assignedTasks, 'No assigned tasks'),
+                    _buildTaskList(completedTasks, 'No completed tasks'),
+                    _buildTaskList(cancelledTasks, 'No cancelled tasks'),
                   ],
                 ),
               ),
@@ -160,8 +162,8 @@ class _JobListScreenState extends State<JobListScreen>
     );
   }
 
-  Widget _buildJobList(List<JobModel> jobs, String emptyMessage) {
-    if (jobs.isEmpty) {
+  Widget _buildTaskList(List<TaskModel> tasks, String emptyMessage) {
+    if (tasks.isEmpty) {
       return Center(
         child: Text(
           emptyMessage,
@@ -172,28 +174,28 @@ class _JobListScreenState extends State<JobListScreen>
 
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      itemCount: jobs.length,
+      itemCount: tasks.length,
       itemBuilder: (context, index) {
-        final job = jobs[index];
+        final task = tasks[index];
 
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
           child: ListTile(
-            title: Text(job.title),
+            title: Text(task.title),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(job.description),
+                Text(task.description),
                 const SizedBox(height: 4),
                 Text(
-                  'Posted: ${DateFormat('MMM dd, yyyy - hh:mm a').format(job.createdAt)}',
+                  'Posted: ${DateFormat('MMM dd, yyyy - hh:mm a').format(task.createdAt)}',
                 ),
                 Text(
-                  'Deadline: ${DateFormat('MMM dd, yyyy - hh:mm a').format(job.deadline)}',
+                  'Deadline: ${DateFormat('MMM dd, yyyy - hh:mm a').format(task.deadline)}',
                 ),
               ],
             ),
-            trailing: Text(_statusLabel(job.status)),
+            trailing: Text(_statusLabel(task.status)),
           ),
         );
       },

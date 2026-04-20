@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum Status { open, assigned, completed, cancelled }
 
-class JobModel {
+class TaskModel {
   final String id;
   final String seekerId;
   final String title;
@@ -16,7 +16,7 @@ class JobModel {
   final DateTime createdAt;
   final DateTime deadline;
 
-  JobModel({
+  TaskModel({
     required this.id,
     required this.seekerId,
     required this.title,
@@ -43,10 +43,10 @@ class JobModel {
     };
   }
 
-  factory JobModel.fromDocument(DocumentSnapshot doc) {
+  factory TaskModel.fromDocument(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
 
-    return JobModel(
+    return TaskModel(
       id: doc.id,
       seekerId: data['seekerId']?.toString() ?? '',
       title: data['title']?.toString() ?? '',

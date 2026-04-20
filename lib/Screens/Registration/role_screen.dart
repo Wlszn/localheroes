@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'register_screen.dart';
 import 'login_screen.dart';
 import '../../Models/user_model.dart';
 
+//Role screen that handles role selection for the user when the enter the app initially.
 class Rolescreen extends StatelessWidget {
   const Rolescreen({super.key});
 

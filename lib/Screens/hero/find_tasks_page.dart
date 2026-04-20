@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import '../../Controllers/task_controller.dart';
 import '../../Models/task_model.dart';
 
+//Screen for the hero to find tasks to complete
+
 class FindTasksScreen extends StatefulWidget {
   const FindTasksScreen({Key? key}) : super(key: key);
 
@@ -36,8 +38,8 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
     }
   }
 
-  List<JobModel> _sortJobs(List<JobModel> jobs) {
-    final sorted = [...jobs];
+  List<TaskModel> _sortTasks(List<TaskModel> tasks) {
+    final sorted = [...tasks];
 
     switch (_selectedFilter) {
       case 'Highest Pay':
@@ -61,8 +63,8 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
       body: SafeArea(
-        child: StreamBuilder<List<JobModel>>(
-          stream: _taskController.getAvailableJobs(),
+        child: StreamBuilder<List<TaskModel>>(
+          stream: _taskController.getAvailableTasks(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -70,21 +72,21 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
 
             if (snapshot.hasError) {
               return const Center(
-                child: Text('Error loading jobs'),
+                child: Text('Error loading tasks'),
               );
             }
 
-            final jobs = _sortJobs(snapshot.data ?? []);
+            final tasks = _sortTasks(snapshot.data ?? []);
 
             return Column(
               children: [
-                _buildHeader(jobs.length),
+                _buildHeader(tasks.length),
                 _buildFilterBar(),
                 Expanded(
-                  child: jobs.isEmpty
+                  child: tasks.isEmpty
                       ? const Center(
                     child: Text(
-                      'No available jobs right now',
+                      'No available tasks right now',
                       style: TextStyle(
                         fontSize: 16,
                         color: Color(0xFF4B5563),
@@ -96,11 +98,11 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
                       horizontal: 16,
                       vertical: 24,
                     ),
-                    itemCount: jobs.length,
+                    itemCount: tasks.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16),
-                        child: _buildJobCard(jobs[index]),
+                        child: _buildTaskCard(tasks[index]),
                       );
                     },
                   ),
@@ -113,7 +115,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
     );
   }
 
-  Widget _buildHeader(int jobCount) {
+  Widget _buildHeader(int taskCount) {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -132,7 +134,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Available Jobs',
+                    'Available Tasks',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -158,7 +160,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
           const SizedBox(height: 16),
           Row(
             children: [
-              Expanded(child: _buildStatCard(jobCount.toString(), 'Available')),
+              Expanded(child: _buildStatCard(taskCount.toString(), 'Available')),
               const SizedBox(width: 12),
               Expanded(child: _buildStatCard('4.8', 'Rating')),
               const SizedBox(width: 12),
@@ -174,7 +176,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -275,14 +277,14 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
     );
   }
 
-  Widget _buildJobCard(JobModel job) {
+  Widget _buildTaskCard(TaskModel task) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black,
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -308,7 +310,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        job.categoryId,
+                        task.categoryId,
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -327,7 +329,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        _formatDate(job.createdAt),
+                        _formatDate(task.createdAt),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -346,7 +348,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            job.title,
+                            task.title,
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -355,7 +357,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            job.description,
+                            task.description,
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -373,7 +375,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '\$${job.price.toStringAsFixed(0)}',
+                          '\$${task.price.toStringAsFixed(0)}',
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -403,7 +405,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
-                        job.location,
+                        task.location,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -420,7 +422,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      _formatTime(job.createdAt),
+                      _formatTime(task.createdAt),
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
@@ -449,7 +451,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    _formatPostedTime(job.createdAt),
+                    _formatPostedTime(task.createdAt),
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,

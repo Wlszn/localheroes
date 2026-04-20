@@ -5,6 +5,7 @@ import '../../Controllers/auth_controller.dart';
 import '../../Models/user_model.dart';
 import 'login_screen.dart';
 
+//Registration screen that handles user registration
 class Registerscreen extends StatefulWidget {
   const Registerscreen({super.key, required this.selectedRole});
 

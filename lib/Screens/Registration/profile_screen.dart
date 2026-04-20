@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../Widgets/profile_input_field.dart';
 
+//Profile screen that finishes the users registration
+
 class Profilescreen extends StatefulWidget {
   const Profilescreen({super.key});
 
@@ -41,7 +43,7 @@ class _ProfilescreenState extends State<Profilescreen> {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.10),
+                    color: Colors.black,
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),

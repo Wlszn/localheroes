@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import '../../Controllers/task_controller.dart';
 import 'package:intl/intl.dart';
 
-class PostJobScreen extends StatefulWidget {
-  const PostJobScreen({Key? key}) : super(key: key);
+// Screen to allow users to post tasks onto the app/map
+
+class PostTaskScreen extends StatefulWidget {
+  const PostTaskScreen({Key? key}) : super(key: key);
 
   @override
-  State<PostJobScreen> createState() => _PostJobScreenState();
+  State<PostTaskScreen> createState() => _PostTaskScreenState();
 }
 
-class _PostJobScreenState extends State<PostJobScreen> {
-  final TextEditingController _jobTitleController = TextEditingController();
+class _PostTaskScreenState extends State<PostTaskScreen> {
+  final TextEditingController _taskTitleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _budgetController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
@@ -34,7 +36,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
 
   @override
   void dispose() {
-    _jobTitleController.dispose();
+    _taskTitleController.dispose();
     _descriptionController.dispose();
     _budgetController.dispose();
     _locationController.dispose();
@@ -69,8 +71,8 @@ class _PostJobScreenState extends State<PostJobScreen> {
     }
   }
 
-  Future<void> _handlePostJob() async {
-    final title = _jobTitleController.text.trim();
+  Future<void> _handlePostTask() async {
+    final title = _taskTitleController.text.trim();
     final description = _descriptionController.text.trim();
     final budgetText = _budgetController.text.trim();
     final location = _locationController.text.trim();
@@ -117,7 +119,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
     });
 
     try {
-      await _taskController.createJob(
+      await _taskController.createTask(
         title: title,
         description: description,
         categoryId: _selectedCategory!,
@@ -129,7 +131,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Job posted successfully')),
+        const SnackBar(content: Text('Task posted successfully')),
       );
 
       Navigator.pop(context);
@@ -137,7 +139,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error posting job: $e')),
+        SnackBar(content: Text('Error posting task: $e')),
       );
     } finally {
       if (!mounted) return;
@@ -163,7 +165,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Post a Job',
+              'Post a Task',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -193,7 +195,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
         child: Column(
           children: [
             const SizedBox(height: 8),
-            _buildJobDetailsCard(),
+            _buildTaskDetailsCard(),
             const SizedBox(height: 24),
             _buildWhenWhereCard(),
             const SizedBox(height: 24),
@@ -207,14 +209,14 @@ class _PostJobScreenState extends State<PostJobScreen> {
     );
   }
 
-  Widget _buildJobDetailsCard() {
+  Widget _buildTaskDetailsCard() {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black,
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -225,9 +227,9 @@ class _PostJobScreenState extends State<PostJobScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildInputField(
-            label: 'Job Title *',
+            label: 'Task Title *',
             placeholder: 'e.g., Deep clean 2-bedroom apartment',
-            controller: _jobTitleController,
+            controller: _taskTitleController,
           ),
           const SizedBox(height: 16),
           _buildCategoryDropdown(),
@@ -288,7 +290,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
         borderRadius: BorderRadius.circular(14),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black,
             blurRadius: 3,
             offset: const Offset(0, 1),
           ),
@@ -502,7 +504,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
         ),
         const SizedBox(height: 4),
         const Text(
-          'This is your maximum budget for this job',
+          'This is your maximum budget for this task',
           style: TextStyle(
             fontSize: 12,
             color: Color(0xFF6A7282),
@@ -670,7 +672,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
   Widget _buildPhotoUpload() {
     return GestureDetector(
       onTap: () {
-        print('Open photo picker');
+        Text('Open photo picker');
       },
       child: Container(
         height: 192,
@@ -745,7 +747,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
               borderRadius: BorderRadius.circular(8),
             ),
             child: TextButton(
-              onPressed: _isLoading ? null : _handlePostJob,
+              onPressed: _isLoading ? null : _handlePostTask,
               child: _isLoading
                   ? const SizedBox(
                 width: 18,
@@ -756,7 +758,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
                 ),
               )
                   : const Text(
-                'Post Job',
+                'Post Task',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,

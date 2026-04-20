@@ -2,11 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../Models/task_model.dart';
 
+//Handles creation of tasks and
 class TaskController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Stream<List<JobModel>> getMyJobs() {
+  Stream<List<TaskModel>> getMyTasks() {
     final user = _auth.currentUser;
 
     if (user == null) {
@@ -19,12 +20,12 @@ class TaskController {
         .snapshots()
         .map((snapshot) {
           return snapshot.docs
-              .map((doc) => JobModel.fromDocument(doc))
+              .map((doc) => TaskModel.fromDocument(doc))
               .toList();
         });
   }
 
-  Future<void> createJob({
+  Future<void> createTask({
     required String title,
     required String description,
     required String categoryId,
@@ -38,7 +39,7 @@ class TaskController {
       throw Exception('No Logged in user found');
     }
 
-    final job = JobModel(
+    final task = TaskModel(
       id: '',
       seekerId: user.uid,
       title: title,
@@ -51,16 +52,16 @@ class TaskController {
       deadline: deadline,
     );
 
-    await _firestore.collection('tasks').add(job.toMap());
+    await _firestore.collection('tasks').add(task.toMap());
   }
 
-  Stream<List<JobModel>> getAvailableJobs() {
+  Stream<List<TaskModel>> getAvailableTasks() {
     return _firestore
         .collection('tasks')
         .where('status', isEqualTo: Status.open.name)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs.map((doc) => JobModel.fromDocument(doc)).toList();
+      return snapshot.docs.map((doc) => TaskModel.fromDocument(doc)).toList();
     });
   }
 }
