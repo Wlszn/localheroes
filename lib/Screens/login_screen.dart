@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'role_screen.dart';
-import '../Controllers/auth.dart';
+import '../Controllers/auth_controller.dart';
 import '../Models/user_model.dart';
 import 'register_screen.dart';
 import '../Screens/find_heroes_screen.dart';
