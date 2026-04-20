@@ -53,4 +53,14 @@ class TaskController {
 
     await _firestore.collection('tasks').add(job.toMap());
   }
+
+  Stream<List<JobModel>> getAvailableJobs() {
+    return _firestore
+        .collection('tasks')
+        .where('status', isEqualTo: Status.open.name)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) => JobModel.fromDocument(doc)).toList();
+    });
+  }
 }

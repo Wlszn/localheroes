@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import '../hero_main_screen.dart';
 import 'role_screen.dart';
 import '../../Controllers/auth_controller.dart';
 import '../../Models/user_model.dart';
 import 'register_screen.dart';
-import '../main_screen.dart';
+import '../seeker_main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.selectedRole});
@@ -44,7 +45,12 @@ class _LoginScreenState extends State<LoginScreen> {
       if (widget.selectedRole == Role.seeker) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MainScreen()),
+          MaterialPageRoute(builder: (context) => SeekerMainScreen()),
+        );
+      } else if (widget.selectedRole == Role.hero) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HeroMainScreen()),
         );
       }
     } catch (e) {

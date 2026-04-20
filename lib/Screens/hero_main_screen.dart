@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import '/widgets/bottom_navigation.dart';
-import '/widgets/navigation_drawer.dart';
-import 'job_list_screen.dart';
-import 'find_heroes_screen.dart';
+import 'seeker_tasklist_screen.dart';
+import '../Widgets/hero_bottom_navigation.dart';
+import 'find_tasks_page.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+class HeroMainScreen extends StatefulWidget {
+  const HeroMainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<HeroMainScreen> createState() => _HeroMainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
-  //index to switch between pages
+class _HeroMainScreenState extends State<HeroMainScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = const [
-    FindHeroesScreen(),
+    FindTasksScreen(),
     JobListScreen(),
+
+
   ];
 
   void _onItemTapped(int index) {
@@ -35,7 +35,6 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-      drawer: Navigationdrawer(),
 
     );
   }
