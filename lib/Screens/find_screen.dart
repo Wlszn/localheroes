@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../Screens/role_screen.dart';
 import '../Screens/secure_screen.dart';
-import '../Widgets/intial_screen_indicator.dart';
+import '../Widgets/initial_screen_indicator.dart';
 
 class FindScreen extends StatelessWidget {
   const FindScreen({super.key});

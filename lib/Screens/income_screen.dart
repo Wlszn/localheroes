@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../Screens/secure_screen.dart';
 import '../Screens/role_screen.dart';
-import '../Widgets/intial_screen_indicator.dart';
+import '../Widgets/initial_screen_indicator.dart';
 
 class IncomeScreen extends StatelessWidget {
   const IncomeScreen({super.key});

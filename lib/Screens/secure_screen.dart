@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../Screens/find_screen.dart';
 import '../Screens/income_screen.dart';
-import '../Widgets/intial_screen_indicator.dart';
+import '../Widgets/initial_screen_indicator.dart';
 
 class SecureScreen extends StatelessWidget {
   const SecureScreen({super.key});
