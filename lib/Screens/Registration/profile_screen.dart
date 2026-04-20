@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Widgets/profile_input_field.dart';
+import '../../Widgets/profile_input_field.dart';
 
 class Profilescreen extends StatefulWidget {
   const Profilescreen({super.key});

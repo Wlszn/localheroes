@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../Controllers/task_controller.dart';
-import '../Models/task_model.dart';
+import '../../Controllers/task_controller.dart';
+import '../../Models/task_model.dart';
 
 class FindTasksScreen extends StatefulWidget {
   const FindTasksScreen({Key? key}) : super(key: key);

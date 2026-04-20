@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'seeker_tasklist_screen.dart';
-import '../Widgets/hero_bottom_navigation.dart';
+import '../seeker/seeker_tasklist_screen.dart';
+import '../../Widgets/hero_bottom_navigation.dart';
 import 'find_tasks_page.dart';
 
 class HeroMainScreen extends StatefulWidget {

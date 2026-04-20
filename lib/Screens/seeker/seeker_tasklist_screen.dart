@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../Controllers/task_controller.dart';
-import '../Models/task_model.dart';
+import '../../Controllers/task_controller.dart';
+import '../../Models/task_model.dart';
 import 'post_task_screen.dart';
 
 class JobListScreen extends StatefulWidget {

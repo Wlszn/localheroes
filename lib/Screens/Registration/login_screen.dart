@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../hero_main_screen.dart';
+import '../hero/hero_main_screen.dart';
 import 'role_screen.dart';
 import '../../Controllers/auth_controller.dart';
 import '../../Models/user_model.dart';
 import 'register_screen.dart';
-import '../seeker_main_screen.dart';
+import '../seeker/seeker_main_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.selectedRole});
