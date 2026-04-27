@@ -5,6 +5,7 @@ import '../../Controllers/auth_controller.dart';
 import '../../Models/user_model.dart';
 import 'register_screen.dart';
 import '../seeker/seeker_main_screen.dart';
+import '../Registration/reset_password_screen.dart';
 
 //Screen that handles the login form
 
@@ -121,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           TextButton(
                             onPressed: () {
-                              //Navigator.push(context, MaterialPageRoute(builder: (context) => Forgotpassword()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => ResetPasswordPage()));
                             },
                             child: Text(
                               'Forgot Password?',
