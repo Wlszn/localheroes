@@ -176,7 +176,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Color(0xFF155DFC),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
