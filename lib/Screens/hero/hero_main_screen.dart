@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../seeker/seeker_tasklist_screen.dart';
 import '../../Widgets/hero_bottom_navigation.dart';
 import 'find_tasks_page.dart';
+import 'schedule_screen.dart';
+import 'income_screen.dart';
 
 //Main screen that handles the navigation of the hero side of the app
 
@@ -17,7 +18,8 @@ class _HeroMainScreenState extends State<HeroMainScreen> {
 
   final List<Widget> _pages = const [
     FindTasksScreen(),
-    TaskListScreen(),
+
+    IncomeScreen()
 
 
   ];
