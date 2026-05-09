@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '/widgets/seeker_bottom_navigation.dart';
+import '../settings_screen.dart';
 import 'seeker_tasklist_screen.dart';
 import 'find_heroes_screen.dart';
 
@@ -18,6 +19,8 @@ class _MainScreenState extends State<SeekerMainScreen> {
   final List<Widget> _pages = const [
     FindHeroesScreen(),
     TaskListScreen(),
+    SizedBox(), //messages removed
+    SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -29,8 +32,7 @@ class _MainScreenState extends State<SeekerMainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      _pages[_selectedIndex],
+      body: _pages[_selectedIndex],
       bottomNavigationBar: Bottomnavigation(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../Controllers/task_controller.dart';
 import 'package:intl/intl.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 // Screen to allow users to post tasks onto the app/map
 
@@ -23,6 +25,10 @@ class _PostTaskScreenState extends State<PostTaskScreen> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
   bool _isLoading = false;
+  bool _isGettingLocation = false;
+
+  double? _selectedLatitude;
+  double? _selectedLongitude;
 
   final List<String> _categories = [
     'Cleaning',
@@ -71,19 +77,109 @@ class _PostTaskScreenState extends State<PostTaskScreen> {
     }
   }
 
+  Future<bool> _checkLocationPermission() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enable location services')),
+      );
+      return false;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.denied) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Location permission was denied')),
+      );
+      return false;
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Location permission is permanently denied'),
+        ),
+      );
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<void> _useCurrentLocation() async {
+    setState(() {
+      _isGettingLocation = true;
+    });
+
+    try {
+      final hasPermission = await _checkLocationPermission();
+
+      if (!hasPermission) {
+        setState(() {
+          _isGettingLocation = false;
+        });
+        return;
+      }
+
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      final placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      String address = 'Current Location';
+
+      if (placemarks.isNotEmpty) {
+        final place = placemarks.first;
+        address =
+            '${place.street ?? ''}, ${place.locality ?? ''}, ${place.administrativeArea ?? ''}'
+                .replaceAll(RegExp(r'^,\s*'), '')
+                .replaceAll(RegExp(r',\s*,'), ',');
+      }
+
+      setState(() {
+        _selectedLatitude = position.latitude;
+        _selectedLongitude = position.longitude;
+        _locationController.text = address;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error getting location: $e')),
+      );
+    }
+
+    setState(() {
+      _isGettingLocation = false;
+    });
+  }
+
+  Future<void> _getCoordinatesFromAddress(String address) async {
+    if (_selectedLatitude != null && _selectedLongitude != null) {
+      return;
+    }
+
+    final locations = await locationFromAddress(address);
+
+    if (locations.isNotEmpty) {
+      _selectedLatitude = locations.first.latitude;
+      _selectedLongitude = locations.first.longitude;
+    }
+  }
+
   Future<void> _handlePostTask() async {
     final title = _taskTitleController.text.trim();
     final description = _descriptionController.text.trim();
     final budgetText = _budgetController.text.trim();
     final location = _locationController.text.trim();
-
-    final deadlineDateTime = DateTime(
-      _selectedDate!.year,
-      _selectedDate!.month,
-      _selectedDate!.day,
-      _selectedTime!.hour,
-      _selectedTime!.minute,
-    );
 
     if (title.isEmpty ||
         description.isEmpty ||
@@ -95,15 +191,24 @@ class _PostTaskScreenState extends State<PostTaskScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill in all required fields')),
       );
+      return;
+    }
 
-      if (deadlineDateTime.isBefore(DateTime.now())) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Deadline must be in the future'),
-          ),
-        );
-        return;
-      }
+    final deadlineDateTime = DateTime(
+      _selectedDate!.year,
+      _selectedDate!.month,
+      _selectedDate!.day,
+      _selectedTime!.hour,
+      _selectedTime!.minute,
+    );
+
+    if (deadlineDateTime.isBefore(DateTime.now())) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Deadline must be in the future'),
+        ),
+      );
+      return;
     }
 
     final budget = double.tryParse(budgetText);
@@ -119,6 +224,8 @@ class _PostTaskScreenState extends State<PostTaskScreen> {
     });
 
     try {
+      await _getCoordinatesFromAddress(location);
+
       await _taskController.createTask(
         title: title,
         description: description,
@@ -126,6 +233,8 @@ class _PostTaskScreenState extends State<PostTaskScreen> {
         location: location,
         price: budget,
         deadline: deadlineDateTime,
+        latitude: _selectedLatitude,
+        longitude: _selectedLongitude,
       );
 
       if (!mounted) return;
@@ -214,11 +323,11 @@ class _PostTaskScreenState extends State<PostTaskScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black,
             blurRadius: 3,
-            offset: const Offset(0, 1),
+            offset: Offset(0, 1),
           ),
         ],
       ),
@@ -252,11 +361,11 @@ class _PostTaskScreenState extends State<PostTaskScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black,
             blurRadius: 3,
-            offset: const Offset(0, 1),
+            offset: Offset(0, 1),
           ),
         ],
       ),
@@ -288,11 +397,11 @@ class _PostTaskScreenState extends State<PostTaskScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black,
             blurRadius: 3,
-            offset: const Offset(0, 1),
+            offset: Offset(0, 1),
           ),
         ],
       ),
@@ -556,9 +665,35 @@ class _PostTaskScreenState extends State<PostTaskScreen> {
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(vertical: 8),
                   ),
+                  onChanged: (value) {
+                    _selectedLatitude = null;
+                    _selectedLongitude = null;
+                  },
+                ),
+              ),
+              IconButton(
+                onPressed: _isGettingLocation ? null : _useCurrentLocation,
+                icon: _isGettingLocation
+                    ? const SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+                    : const Icon(
+                  Icons.my_location,
+                  size: 20,
+                  color: Color(0xFF155DFC),
                 ),
               ),
             ],
+          ),
+        ),
+        const SizedBox(height: 4),
+        const Text(
+          'Tap the location icon to use your current location',
+          style: TextStyle(
+            fontSize: 12,
+            color: Color(0xFF6A7282),
           ),
         ),
       ],

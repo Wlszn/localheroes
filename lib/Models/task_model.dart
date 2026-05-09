@@ -15,6 +15,8 @@ class TaskModel {
   final Status status;
   final DateTime createdAt;
   final DateTime deadline;
+  final double? latitude;
+  final double? longitude;
 
   TaskModel({
     required this.id,
@@ -27,6 +29,8 @@ class TaskModel {
     required this.status,
     required this.createdAt,
     required this.deadline,
+    this.latitude,
+    this.longitude,
   });
 
   Map<String, dynamic> toMap() {
@@ -40,6 +44,8 @@ class TaskModel {
       'status': status.name,
       'createdAt': Timestamp.fromDate(createdAt),
       'deadline': Timestamp.fromDate(deadline),
+      'latitude': latitude,
+      'longitude': longitude,
     };
   }
 
@@ -64,6 +70,12 @@ class TaskModel {
       deadline: data['deadline'] != null
           ? (data['deadline'] as Timestamp).toDate()
           : DateTime.now(),
+      latitude: data['latitude'] != null
+          ? (data['latitude'] as num).toDouble()
+          : null,
+      longitude: data['longitude'] != null
+          ? (data['longitude'] as num).toDouble()
+          : null,
     );
   }
 }

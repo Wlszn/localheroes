@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import '../settings_screen.dart';
 
 // Main screen for the app Find heroes on the navigation bar at the bottom
 class FindHeroesScreen extends StatefulWidget {
@@ -9,6 +12,130 @@ class FindHeroesScreen extends StatefulWidget {
 }
 
 class _FindHeroesScreenState extends State<FindHeroesScreen> {
+  GoogleMapController? _mapController;
+
+  LatLng _currentPosition = const LatLng(45.5017, -73.5673);
+  bool _isLoadingLocation = true;
+
+  final Set<Marker> _markers = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrentLocation();
+  }
+
+  Future<bool> _checkLocationPermission() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      setState(() {
+        _isLoadingLocation = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enable location services')),
+      );
+
+      return false;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.denied) {
+      setState(() {
+        _isLoadingLocation = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Location permission was denied')),
+      );
+
+      return false;
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      setState(() {
+        _isLoadingLocation = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Location permission is permanently denied'),
+        ),
+      );
+
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<void> _loadCurrentLocation() async {
+    final hasPermission = await _checkLocationPermission();
+
+    if (!hasPermission) {
+      _addCurrentLocationMarker();
+      return;
+    }
+
+    final position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    setState(() {
+      _currentPosition = LatLng(position.latitude, position.longitude);
+      _isLoadingLocation = false;
+    });
+
+    _addCurrentLocationMarker();
+
+    _mapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: _currentPosition,
+          zoom: 14,
+        ),
+      ),
+    );
+  }
+
+  void _addCurrentLocationMarker() {
+    setState(() {
+      _markers.clear();
+
+      _markers.add(
+        Marker(
+          markerId: const MarkerId('current_location'),
+          position: _currentPosition,
+          infoWindow: const InfoWindow(
+            title: 'Your Location',
+            snippet: 'Heroes near you will appear around this area',
+          ),
+        ),
+      );
+    });
+  }
+
+  void _goToProfile() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SettingsScreen(),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _mapController?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +178,7 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
                                 ),
                                 SizedBox(width: 2),
                                 Text(
-                                  'Downtown, Montreal',
+                                  'Current Location',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Color(0xFF6B7280),
@@ -71,7 +198,7 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: _goToProfile,
                         icon: const Icon(
                           Icons.person_outline,
                           size: 22,
@@ -111,7 +238,7 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
                         width: 46,
                         height: 46,
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: _loadCurrentLocation,
                           style: OutlinedButton.styleFrom(
                             padding: EdgeInsets.zero,
                             backgroundColor: Colors.white,
@@ -121,7 +248,7 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
                             ),
                           ),
                           child: const Icon(
-                            Icons.format_list_bulleted,
+                            Icons.my_location,
                             color: Color(0xFF374151),
                             size: 20,
                           ),
@@ -133,32 +260,38 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
               ),
             ),
             Expanded(
-              child: Container(
-                width: double.infinity,
-                color: const Color(0xFFEFF1FC),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.map_outlined,
-                      size: 64,
-                      color: Color(0xFF9CA3AF),
+              child: Stack(
+                children: [
+                  GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: _currentPosition,
+                      zoom: 14,
                     ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Map view showing 6 heroes nearby',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xFF4B5563),
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: false,
+                    zoomControlsEnabled: false,
+                    markers: _markers,
+                    onMapCreated: (controller) {
+                      _mapController = controller;
+                    },
+                  ),
+                  if (_isLoadingLocation)
+                    Container(
+                      color: Colors.white.withOpacity(0.7),
+                      child: const Center(
+                        child: CircularProgressIndicator(),
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
+                  Positioned(
+                    left: 20,
+                    right: 20,
+                    bottom: 20,
+                    child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: const Color(0xFF111827),
-                        elevation: 0,
+                        elevation: 2,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 12,
@@ -172,8 +305,8 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
                         style: TextStyle(fontSize: 15),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

@@ -12,9 +12,8 @@ class Bottomnavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return BottomNavigationBar(
-      items: [
+      items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.map_outlined),
           label: 'Find Heroes',
@@ -31,7 +30,7 @@ class Bottomnavigation extends StatelessWidget {
           backgroundColor: Colors.blueAccent,
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.map_outlined),
+          icon: Icon(Icons.person_outline),
           label: 'Profile',
           backgroundColor: Colors.blueAccent,
         ),

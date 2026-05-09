@@ -19,10 +19,10 @@ class TaskController {
         .where('seekerId', isEqualTo: user.uid)
         .snapshots()
         .map((snapshot) {
-          return snapshot.docs
-              .map((doc) => TaskModel.fromDocument(doc))
-              .toList();
-        });
+      return snapshot.docs
+          .map((doc) => TaskModel.fromDocument(doc))
+          .toList();
+    });
   }
 
   Future<void> createTask({
@@ -32,6 +32,8 @@ class TaskController {
     required String location,
     required double price,
     required DateTime deadline,
+    double? latitude,
+    double? longitude,
   }) async {
     final user = _auth.currentUser;
 
@@ -50,6 +52,8 @@ class TaskController {
       status: Status.open,
       createdAt: DateTime.now(),
       deadline: deadline,
+      latitude: latitude,
+      longitude: longitude,
     );
 
     await _firestore.collection('tasks').add(task.toMap());

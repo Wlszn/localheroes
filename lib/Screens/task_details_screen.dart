@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../Models/task_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../Models/task_model.dart';
 
 class TaskDetailsScreen extends StatelessWidget {
   final TaskModel task;
@@ -178,8 +179,8 @@ class TaskDetailsScreen extends StatelessWidget {
               Expanded(
                 child: _infoBox(
                   icon: Icons.calendar_today,
-                  iconColor: Color(0xFF2563EB),
-                  iconBg: Color(0xFFDBEAFE),
+                  iconColor: const Color(0xFF2563EB),
+                  iconBg: const Color(0xFFDBEAFE),
                   label: 'Date',
                   value: _formatDate(task.deadline),
                 ),
@@ -188,8 +189,8 @@ class TaskDetailsScreen extends StatelessWidget {
               Expanded(
                 child: _infoBox(
                   icon: Icons.access_time,
-                  iconColor: Color(0xFF9810FA),
-                  iconBg: Color(0xFFF3E8FF),
+                  iconColor: const Color(0xFF9810FA),
+                  iconBg: const Color(0xFFF3E8FF),
                   label: 'Time',
                   value: _formatTime(task.deadline),
                 ),
@@ -199,8 +200,8 @@ class TaskDetailsScreen extends StatelessWidget {
           const SizedBox(height: 12),
           _infoBox(
             icon: Icons.location_on_outlined,
-            iconColor: Color(0xFF00A63E),
-            iconBg: Color(0xFFDCFCE7),
+            iconColor: const Color(0xFF00A63E),
+            iconBg: const Color(0xFFDCFCE7),
             label: 'Location',
             value: task.location,
           ),
@@ -282,6 +283,8 @@ class TaskDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildMapCard() {
+    final bool hasLocation = task.latitude != null && task.longitude != null;
+
     return _card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -299,7 +302,9 @@ class TaskDetailsScreen extends StatelessWidget {
             height: 150,
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
+              gradient: hasLocation
+                  ? null
+                  : const LinearGradient(
                 colors: [
                   Color(0xFFDBEAFE),
                   Color(0xFFF3E8FF),
@@ -309,7 +314,27 @@ class TaskDetailsScreen extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Column(
+            clipBehavior: Clip.hardEdge,
+            child: hasLocation
+                ? GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(task.latitude!, task.longitude!),
+                zoom: 14,
+              ),
+              markers: {
+                Marker(
+                  markerId: const MarkerId('task_location'),
+                  position: LatLng(task.latitude!, task.longitude!),
+                  infoWindow: InfoWindow(
+                    title: task.title,
+                    snippet: task.location,
+                  ),
+                ),
+              },
+              zoomControlsEnabled: false,
+              myLocationButtonEnabled: false,
+            )
+                : const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
