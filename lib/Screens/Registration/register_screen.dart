@@ -51,6 +51,13 @@ class _RegisterscreenState extends State<Registerscreen> {
       _nameController.clear();
       _emailController.clear();
       _passwordController.clear();
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(selectedRole: widget.selectedRole),
+        ),
+      );
     } catch (e) {
       if (!mounted) return;
 
@@ -67,7 +74,20 @@ class _RegisterscreenState extends State<Registerscreen> {
 
   @override
   Widget build(BuildContext context) {
-    String roleText = widget.selectedRole == Role.seeker ? 'Seeker' : 'Hero';
+    String roleText;
+
+    switch (widget.selectedRole) {
+      case Role.seeker:
+        roleText = 'Seeker';
+        break;
+      case Role.hero:
+        roleText = 'Hero';
+        break;
+      case Role.admin:
+        roleText = 'Admin';
+        break;
+    }
+
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false),
       body: Center(
@@ -169,17 +189,19 @@ class _RegisterscreenState extends State<Registerscreen> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Rolescreen()),
+                            MaterialPageRoute(
+                              builder: (context) => Rolescreen(),
+                            ),
                           );
                         },
                         icon: Icon(Icons.arrow_back, color: Colors.black54),
                         label: isLoading
                             ? const CircularProgressIndicator()
                             : Text(
-                          'Back to role selection',
-                          style: TextStyle(color: Colors.black54),
-                        ),
-                      )
+                                'Back to role selection',
+                                style: TextStyle(color: Colors.black54),
+                              ),
+                      ),
                     ],
                   ),
                 ),

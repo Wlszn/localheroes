@@ -152,6 +152,30 @@ class Rolescreen extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: 10),
+          Padding(
+            padding: EdgeInsetsDirectional.symmetric(horizontal: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            LoginScreen(selectedRole: Role.admin),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'Admin Login',
+                    style: TextStyle(color: Colors.black87, fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

@@ -6,6 +6,7 @@ import '../../Models/user_model.dart';
 import 'register_screen.dart';
 import '../seeker/seeker_main_screen.dart';
 import '../Registration/reset_password_screen.dart';
+import '../admin_screen.dart';
 
 //Screen that handles the login form
 
@@ -45,16 +46,27 @@ class _LoginScreenState extends State<LoginScreen> {
       _emailController.clear();
       _passwordController.clear();
 
-      if (widget.selectedRole == Role.seeker) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SeekerMainScreen()),
-        );
-      } else if (widget.selectedRole == Role.hero) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HeroMainScreen()),
-        );
+      switch (widget.selectedRole) {
+        case Role.seeker:
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SeekerMainScreen()),
+          );
+          break;
+
+        case Role.hero:
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HeroMainScreen()),
+          );
+          break;
+
+        case Role.admin:
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AdminDashboardScreen()),
+          );
+          break;
       }
     } catch (e) {
       if (!mounted) return;
@@ -70,7 +82,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String roleText = widget.selectedRole == Role.seeker ? 'Seeker' : 'Hero';
+    String roleText;
+
+    switch (widget.selectedRole) {
+      case Role.seeker:
+        roleText = 'Seeker';
+        break;
+      case Role.hero:
+        roleText = 'Hero';
+        break;
+      case Role.admin:
+        roleText = 'Admin';
+        break;
+    }
+
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false),
       body: Center(
@@ -122,7 +147,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           TextButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => ResetPasswordPage()));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ResetPasswordPage(),
+                                ),
+                              );
                             },
                             child: Text(
                               'Forgot Password?',
@@ -177,10 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           );
                         },
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: Colors.black54,
-                        ),
+                        icon: Icon(Icons.arrow_back, color: Colors.black54),
                         label: isLoading
                             ? const CircularProgressIndicator()
                             : Text(

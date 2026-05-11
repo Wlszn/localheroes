@@ -68,4 +68,13 @@ class TaskController {
       return snapshot.docs.map((doc) => TaskModel.fromDocument(doc)).toList();
     });
   }
+
+  Future<int> countCompletedTasks() async {
+    final snapshot = await _firestore
+        .collection('tasks')
+        .where('status', isEqualTo: Status.completed.name)
+        .get();
+
+    return snapshot.size;
+  }
 }
