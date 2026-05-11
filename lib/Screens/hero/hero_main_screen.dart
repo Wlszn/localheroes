@@ -18,7 +18,7 @@ class _HeroMainScreenState extends State<HeroMainScreen> {
 
   final List<Widget> _pages = const [
     FindTasksScreen(),
-
+    ScheduleScreen(),
     IncomeScreen()
 
 

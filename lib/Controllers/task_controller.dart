@@ -78,8 +78,8 @@ class TaskController {
 
     if (user == null) {
       return Stream.value([]);
-    }
 
+    }
     return _firestore
         .collection('tasks')
         .where('heroId', isEqualTo: user.uid)
