@@ -37,7 +37,7 @@ class AuthController {
         email: email,
         phone: phone,
         role: role,
-        isVerifiedHero: false,
+        isApproved: false,
         createdAt: DateTime.now(),
       );
 
@@ -68,7 +68,7 @@ class AuthController {
   }
 
   //Logout user
-  Future<void> lopgoutUser() async {
+  Future<void> logoutUser() async {
     await _auth.signOut();
   }
 

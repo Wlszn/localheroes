@@ -199,7 +199,7 @@ class _HeroMapScreenState extends State<HeroMapScreen> {
   double _deg2rad(double deg) => deg * (pi / 180);
 
   Future<void> _logout() async {
-    await _authController.lopgoutUser();
+    await _authController.logoutUser();
     if (!mounted) return;
     Navigator.pushAndRemoveUntil(
       context,
@@ -381,7 +381,7 @@ class _HeroMapScreenState extends State<HeroMapScreen> {
     final name = _heroProfile?.name ?? 'Hero';
     final email = _heroProfile?.email ?? '';
     final phone = _heroProfile?.phone ?? '';
-    final verified = _heroProfile?.isVerifiedHero ?? false;
+    final verified = _heroProfile?.isApproved ?? false;
 
     return Container(
       height: 340,

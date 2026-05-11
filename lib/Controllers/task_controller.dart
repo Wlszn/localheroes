@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../Models/task_model.dart';
+import 'auth_controller.dart';
 
 class TaskController {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final AuthController _authController = AuthController();
 
   String? get currentUserId => _auth.currentUser?.uid;
 
@@ -36,6 +38,7 @@ class TaskController {
   }) async {
     final user = _auth.currentUser;
     if (user == null) throw Exception('No logged in user found');
+    await _checkUserApproved();
 
     final task = TaskModel(
       id: '',
@@ -88,15 +91,12 @@ class TaskController {
   Stream<List<TaskModel>> getMapTasks() {
     return _firestore
         .collection('tasks')
-        .where('status', whereIn: [
-      Status.open.name,
-      Status.assigned.name,
-    ])
+        .where('status', whereIn: [Status.open.name, Status.assigned.name])
         .snapshots()
         .map(
           (snapshot) =>
-          snapshot.docs.map((doc) => TaskModel.fromDocument(doc)).toList(),
-    );
+              snapshot.docs.map((doc) => TaskModel.fromDocument(doc)).toList(),
+        );
   }
 
   // All tasks ever completed by this hero (for income history)
@@ -119,6 +119,8 @@ class TaskController {
   Future<void> acceptTask(String taskId) async {
     final user = _auth.currentUser;
     if (user == null) throw Exception('No logged in user found');
+
+    await _checkUserApproved();
 
     await _firestore.collection('tasks').doc(taskId).update({
       'status': Status.assigned.name,
@@ -158,5 +160,17 @@ class TaskController {
         .where('status', isEqualTo: Status.completed.name)
         .get();
     return snapshot.size;
+  }
+
+  Future<void> _checkUserApproved() async {
+    final userData = await _authController.getCurrentUserData();
+
+    if (userData == null) {
+      throw Exception('User account not found');
+    }
+
+    if (!userData.isApproved) {
+      throw Exception( 'Your account is waiting for admin approval. You can browse the app, but you cannot create or accept tasks yet.');
+    }
   }
 }

@@ -39,6 +39,10 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
 
   String _formatTime(DateTime dt) => DateFormat('h:mm a').format(dt);
 
+  String _cleanError(Object error) {
+    return error.toString().replaceFirst('Exception: ', '');
+  }
+
   Future<void> _acceptTask() async {
     setState(() => _isLoading = true);
     try {
@@ -68,9 +72,9 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(_cleanError(e)), backgroundColor: Colors.orange),
+      );
     }
     if (mounted) setState(() => _isLoading = false);
   }
@@ -123,9 +127,12 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
       );
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(_cleanError(e)),
+          backgroundColor: Colors.orange,
+        ),
+      );
     }
     if (mounted) setState(() => _isLoading = false);
   }
@@ -637,7 +644,7 @@ class _TaskDetailsScreenState extends State<TaskDetailsScreen> {
         border: Border.all(color: const Color(0xFFE5E7EB)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black,
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

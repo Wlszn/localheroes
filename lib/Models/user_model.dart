@@ -8,7 +8,7 @@ class UserModel {
   final String email;
   final String phone;
   final Role role;
-  final bool isVerifiedHero;
+  final bool isApproved;
   final DateTime createdAt;
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -19,7 +19,7 @@ class UserModel {
     required this.email,
     required this.phone,
     required this.role,
-    required this.isVerifiedHero,
+    required this.isApproved,
     required this.createdAt,
   });
 
@@ -31,7 +31,7 @@ class UserModel {
       'email': email,
       'phone': phone,
       'role': role.name,
-      'isVerifiedHero': isVerifiedHero,
+      'isApproved': isApproved,
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }
@@ -47,7 +47,7 @@ class UserModel {
             (role) => role.name == map['role'],
         orElse: () => Role.seeker,
       ),
-      isVerifiedHero: map['isVerifiedHero'] ?? false,
+      isApproved: map['isApproved'] ?? false,
       createdAt: map['createdAt'] != null
           ? (map['createdAt'] as Timestamp).toDate()
           : DateTime.now(),
@@ -75,13 +75,13 @@ class UserModel {
       email: email ?? this.email,
       phone: phone ?? this.phone,
       role: role ?? this.role,
-      isVerifiedHero: isVerifiedHero ?? this.isVerifiedHero,
+      isApproved: isVerifiedHero ?? this.isApproved,
       createdAt: createdAt ?? this.createdAt,
     );
   }
 
   @override
   String toString() {
-    return 'UserModel{userId: $uid, name: $name, email: $email, phone: $phone, role: $role, isVerifiedHero: $isVerifiedHero, createdAt: $createdAt}';
+    return 'UserModel{userId: $uid, name: $name, email: $email, phone: $phone, role: $role, isApproved: $isApproved, createdAt: $createdAt}';
   }
 }

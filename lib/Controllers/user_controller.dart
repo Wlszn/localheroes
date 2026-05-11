@@ -15,7 +15,7 @@ class UserController {
   Future<int> countActiveHeroes() async {
     final snapshot = await users
         .where('role', isEqualTo: Role.hero.name)
-        .where('isVerifiedHero', isEqualTo: true)
+        .where('isApproved', isEqualTo: true)
         .get();
 
     return snapshot.size;
@@ -34,7 +34,7 @@ class UserController {
   Future<List<UserModel>> getPendingHeroVerifications() async {
     final snapshot = await users
         .where('role', isEqualTo: Role.hero.name)
-        .where('isVerifiedHero', isEqualTo: false)
+        .where('isApproved', isEqualTo: false)
         .get();
 
     return snapshot.docs
@@ -46,14 +46,14 @@ class UserController {
 
   Future<void> approveHero(String uid) async {
     await users.doc(uid).update({
-      'isVerifiedHero': true,
+      'isApproved': true,
       'verifiedAt': Timestamp.now(),
     });
   }
 
   Future<void> rejectHero(String uid) async {
     await users.doc(uid).update({
-      'isVerifiedHero': false,
+      'isApproved': false,
       'rejectedAt': Timestamp.now(),
     });
   }
