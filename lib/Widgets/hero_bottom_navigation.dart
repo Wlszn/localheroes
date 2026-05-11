@@ -12,9 +12,8 @@ class Bottomnavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return BottomNavigationBar(
-      items: [
+      items: const [
         BottomNavigationBarItem(
           icon: Icon(Icons.other_houses_rounded),
           label: 'Find Tasks',
@@ -22,7 +21,7 @@ class Bottomnavigation extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.calendar_today_outlined),
-          label: 'Scheduled Tasks',
+          label: 'Schedule',
           backgroundColor: Colors.blueAccent,
         ),
         BottomNavigationBarItem(
@@ -32,7 +31,7 @@ class Bottomnavigation extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.map_outlined),
-          label: 'Profile',
+          label: 'Map',
           backgroundColor: Colors.blueAccent,
         ),
       ],
