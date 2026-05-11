@@ -7,7 +7,7 @@ import 'package:geolocator/geolocator.dart';
 // Screen to allow users to post tasks onto the app/map
 
 class PostTaskScreen extends StatefulWidget {
-  const PostTaskScreen({Key? key}) : super(key: key);
+  const PostTaskScreen({super.key});
 
   @override
   State<PostTaskScreen> createState() => _PostTaskScreenState();
