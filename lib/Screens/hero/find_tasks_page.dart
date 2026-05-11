@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../../Controllers/task_controller.dart';
 import '../../Models/task_model.dart';
 import '../task_details_screen.dart';
+import 'hero_details_screen.dart';
 
 //Screen for the hero to find tasks to complete
 
@@ -475,7 +476,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              TaskDetailsScreen(task: task),
+                              HeroDetailsScreen(task: task),
                         ),
                       );
                     },

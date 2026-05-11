@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../Models/task_model.dart';
+import '../Models/user_model.dart';
 
 class TaskDetailsScreen extends StatelessWidget {
   final TaskModel task;
@@ -16,6 +18,24 @@ class TaskDetailsScreen extends StatelessWidget {
 
   String _formatTime(DateTime dateTime) =>
       DateFormat('h:mm a').format(dateTime);
+
+  Future<UserModel?> _getHeroUser() async {
+    if (task.heroId == null || task.heroId!.isEmpty) {
+      return null;
+    }
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('userId', isEqualTo: task.heroId)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isEmpty) {
+      return null;
+    }
+
+    return UserModel.fromDocument(snapshot.docs.first);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +54,7 @@ class TaskDetailsScreen extends StatelessWidget {
             ),
             Container(
               margin: const EdgeInsets.only(top: 4),
-              padding:
-              const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
               decoration: BoxDecoration(
                 color: const Color(0xFFEFF6FF),
                 borderRadius: BorderRadius.circular(8),
@@ -57,56 +76,21 @@ class TaskDetailsScreen extends StatelessWidget {
         children: [
           _buildMainJobCard(),
           const SizedBox(height: 18),
+          _buildStatusCard(),
+          const SizedBox(height: 18),
+
+          if (task.status == Status.assigned) ...[
+            _buildAcceptedByCard(),
+            const SizedBox(height: 18),
+          ],
+
           _buildPostedByCard(),
           const SizedBox(height: 18),
           _buildMapCard(),
           const SizedBox(height: 18),
-          _buildDescriptionCard(), // replaces the hardcoded section
-          const SizedBox(height: 80),
+          _buildDescriptionCard(),
+          const SizedBox(height: 24),
         ],
-      ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 18),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Color(0xFFE5E7EB))),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: OutlinedButton(
-                onPressed: () {},
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  side: const BorderSide(color: Color(0xFFE5E7EB)),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
-                child: const Text('Ask Question',
-                    style: TextStyle(fontWeight: FontWeight.w600)),
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  // TODO: accept job logic
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF155DFC),
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
-                child: const Text('Accept Job',
-                    style: TextStyle(fontWeight: FontWeight.w600)),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -141,9 +125,10 @@ class TaskDetailsScreen extends StatelessWidget {
                       color: Color(0xFF00A63E),
                     ),
                   ),
-                  const Text('Budget',
-                      style:
-                      TextStyle(fontSize: 12, color: Color(0xFF6A7282))),
+                  const Text(
+                    'Budget',
+                    style: TextStyle(fontSize: 12, color: Color(0xFF6A7282)),
+                  ),
                 ],
               ),
             ],
@@ -185,53 +170,203 @@ class TaskDetailsScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildStatusCard() {
+    String statusText;
+    Color statusColor;
+    Color backgroundColor;
+
+    switch (task.status) {
+      case Status.open:
+        statusText = 'Open - waiting for a hero';
+        statusColor = const Color(0xFF155DFC);
+        backgroundColor = const Color(0xFFEFF6FF);
+        break;
+      case Status.assigned:
+        statusText = 'Assigned - a hero accepted this task';
+        statusColor = const Color(0xFF00A63E);
+        backgroundColor = const Color(0xFFDCFCE7);
+        break;
+      case Status.completed:
+        statusText = 'Completed';
+        statusColor = const Color(0xFF6B7280);
+        backgroundColor = const Color(0xFFF3F4F6);
+        break;
+      case Status.cancelled:
+        statusText = 'Cancelled';
+        statusColor = const Color(0xFFDC2626);
+        backgroundColor = const Color(0xFFFEE2E2);
+        break;
+    }
+
+    return _card(
+      child: Row(
+        children: [
+          Icon(Icons.info_outline, color: statusColor),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              statusText,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: statusColor,
+              ),
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              task.status.name,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: statusColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAcceptedByCard() {
+    return FutureBuilder<UserModel?>(
+      future: _getHeroUser(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return _card(
+            child: const Row(
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(width: 12),
+                Text('Loading accepted hero...'),
+              ],
+            ),
+          );
+        }
+
+        final hero = snapshot.data;
+
+        return _card(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Accepted By',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF101828),
+                ),
+              ),
+              const SizedBox(height: 18),
+              Row(
+                children: [
+                  const CircleAvatar(
+                    radius: 26,
+                    backgroundColor: Color(0xFF00A63E),
+                    child: Icon(Icons.handyman, color: Colors.white, size: 26),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          hero?.name ?? 'Assigned Hero',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF101828),
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        Text(
+                          hero?.email ?? 'Hero accepted this task',
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Color(0xFF4A5565),
+                          ),
+                        ),
+                        const SizedBox(height: 3),
+                        const Text(
+                          'This hero is now responsible for the task',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Color(0xFF6A7282),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.chat_bubble_outline, size: 16),
+                    label: const Text('Message'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                      side: const BorderSide(color: Color(0xFFE5E7EB)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildPostedByCard() {
     return _card(
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Posted By',
             style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF101828)),
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF101828),
+            ),
           ),
-          const SizedBox(height: 18),
+          SizedBox(height: 18),
           Row(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 26,
                 backgroundColor: Color(0xFF155DFC),
-                child:
-                Icon(Icons.person, color: Colors.white, size: 28),
+                child: Icon(Icons.person, color: Colors.white, size: 28),
               ),
-              const SizedBox(width: 14),
-              const Expanded(
+              SizedBox(width: 14),
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Task Owner',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF101828))),
+                    Text(
+                      'You',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF101828),
+                      ),
+                    ),
                     SizedBox(height: 3),
-                    Text('Member',
-                        style: TextStyle(
-                            fontSize: 13, color: Color(0xFF6A7282))),
+                    Text(
+                      'Task Owner',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF6A7282),
+                      ),
+                    ),
                   ],
-                ),
-              ),
-              OutlinedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.chat_bubble_outline, size: 16),
-                label: const Text('Message'),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  side: const BorderSide(color: Color(0xFFE5E7EB)),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)),
                 ),
               ),
             ],
@@ -242,8 +377,7 @@ class TaskDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildMapCard() {
-    final bool hasLocation =
-        task.latitude != null && task.longitude != null;
+    final bool hasLocation = task.latitude != null && task.longitude != null;
 
     return _card(
       child: Column(
@@ -252,9 +386,10 @@ class TaskDetailsScreen extends StatelessWidget {
           const Text(
             'Location Map',
             style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF101828)),
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF101828),
+            ),
           ),
           const SizedBox(height: 16),
           Container(
@@ -280,8 +415,7 @@ class TaskDetailsScreen extends StatelessWidget {
               markers: {
                 Marker(
                   markerId: const MarkerId('task_location'),
-                  position:
-                  LatLng(task.latitude!, task.longitude!),
+                  position: LatLng(task.latitude!, task.longitude!),
                   infoWindow: InfoWindow(
                     title: task.title,
                     snippet: task.location,
@@ -294,12 +428,19 @@ class TaskDetailsScreen extends StatelessWidget {
                 : const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.location_on_outlined,
-                    size: 48, color: Color(0xFF9CA3AF)),
+                Icon(
+                  Icons.location_on_outlined,
+                  size: 48,
+                  color: Color(0xFF9CA3AF),
+                ),
                 SizedBox(height: 8),
-                Text('Map view of job location',
-                    style: TextStyle(
-                        color: Color(0xFF4A5565), fontSize: 14)),
+                Text(
+                  'Map view of job location',
+                  style: TextStyle(
+                    color: Color(0xFF4A5565),
+                    fontSize: 14,
+                  ),
+                ),
               ],
             ),
           ),
@@ -308,8 +449,6 @@ class TaskDetailsScreen extends StatelessWidget {
     );
   }
 
-  /// Replaces the hardcoded "What You'll Need" card.
-  /// Shows the full task description so the seeker's own words are displayed.
   Widget _buildDescriptionCard() {
     return _card(
       child: Column(
@@ -318,9 +457,10 @@ class TaskDetailsScreen extends StatelessWidget {
           const Text(
             'Task Description',
             style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF101828)),
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF101828),
+            ),
           ),
           const SizedBox(height: 12),
           Text(
@@ -332,7 +472,6 @@ class TaskDetailsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          // Category tag
           Row(
             children: [
               const Icon(Icons.category_outlined,
@@ -341,12 +480,13 @@ class TaskDetailsScreen extends StatelessWidget {
               Text(
                 'Category: ${task.categoryId}',
                 style: const TextStyle(
-                    fontSize: 13, color: Color(0xFF6A7282)),
+                  fontSize: 13,
+                  color: Color(0xFF6A7282),
+                ),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          // Budget reminder
           Row(
             children: [
               const Icon(Icons.attach_money,
@@ -355,7 +495,9 @@ class TaskDetailsScreen extends StatelessWidget {
               Text(
                 'Budget: \$${task.price.toStringAsFixed(2)}',
                 style: const TextStyle(
-                    fontSize: 13, color: Color(0xFF6A7282)),
+                  fontSize: 13,
+                  color: Color(0xFF6A7282),
+                ),
               ),
             ],
           ),
@@ -409,9 +551,11 @@ class TaskDetailsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label,
-                    style: const TextStyle(
-                        fontSize: 12, color: Color(0xFF6A7282))),
+                Text(
+                  label,
+                  style:
+                  const TextStyle(fontSize: 12, color: Color(0xFF6A7282)),
+                ),
                 const SizedBox(height: 3),
                 Text(
                   value,
