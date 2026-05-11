@@ -294,7 +294,7 @@ class _FindTasksScreenState extends State<FindTasksScreen> {
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black,
               blurRadius: 3,
               offset: const Offset(0, 1),
             ),

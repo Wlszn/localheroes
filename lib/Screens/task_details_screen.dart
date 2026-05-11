@@ -11,13 +11,11 @@ class TaskDetailsScreen extends StatelessWidget {
     required this.task,
   });
 
-  String _formatDate(DateTime dateTime) {
-    return DateFormat('EEEE, MMMM d').format(dateTime);
-  }
+  String _formatDate(DateTime dateTime) =>
+      DateFormat('EEEE, MMMM d').format(dateTime);
 
-  String _formatTime(DateTime dateTime) {
-    return DateFormat('h:mm a').format(dateTime);
-  }
+  String _formatTime(DateTime dateTime) =>
+      DateFormat('h:mm a').format(dateTime);
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +30,12 @@ class TaskDetailsScreen extends StatelessWidget {
           children: [
             const Text(
               'Job Details',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Container(
               margin: const EdgeInsets.only(top: 4),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
               decoration: BoxDecoration(
                 color: const Color(0xFFEFF6FF),
                 borderRadius: BorderRadius.circular(8),
@@ -65,7 +61,7 @@ class TaskDetailsScreen extends StatelessWidget {
           const SizedBox(height: 18),
           _buildMapCard(),
           const SizedBox(height: 18),
-          _buildNeedsCard(),
+          _buildDescriptionCard(), // replaces the hardcoded section
           const SizedBox(height: 80),
         ],
       ),
@@ -73,9 +69,7 @@ class TaskDetailsScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 18),
         decoration: const BoxDecoration(
           color: Colors.white,
-          border: Border(
-            top: BorderSide(color: Color(0xFFE5E7EB)),
-          ),
+          border: Border(top: BorderSide(color: Color(0xFFE5E7EB))),
         ),
         child: Row(
           children: [
@@ -86,35 +80,29 @@ class TaskDetailsScreen extends StatelessWidget {
                   foregroundColor: Colors.black,
                   side: const BorderSide(color: Color(0xFFE5E7EB)),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                      borderRadius: BorderRadius.circular(8)),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
-                child: const Text(
-                  'Ask Question',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
+                child: const Text('Ask Question',
+                    style: TextStyle(fontWeight: FontWeight.w600)),
               ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: accept job logic later
+                  // TODO: accept job logic
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF155DFC),
                   foregroundColor: Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                      borderRadius: BorderRadius.circular(8)),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
-                child: const Text(
-                  'Accept Job',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
+                child: const Text('Accept Job',
+                    style: TextStyle(fontWeight: FontWeight.w600)),
               ),
             ),
           ],
@@ -153,25 +141,12 @@ class TaskDetailsScreen extends StatelessWidget {
                       color: Color(0xFF00A63E),
                     ),
                   ),
-                  const Text(
-                    'Budget',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Color(0xFF6A7282),
-                    ),
-                  ),
+                  const Text('Budget',
+                      style:
+                      TextStyle(fontSize: 12, color: Color(0xFF6A7282))),
                 ],
               ),
             ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            task.description,
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1.5,
-              color: Color(0xFF4A5565),
-            ),
           ),
           const SizedBox(height: 22),
           Row(
@@ -218,10 +193,9 @@ class TaskDetailsScreen extends StatelessWidget {
           const Text(
             'Posted By',
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF101828),
-            ),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF101828)),
           ),
           const SizedBox(height: 18),
           Row(
@@ -229,37 +203,23 @@ class TaskDetailsScreen extends StatelessWidget {
               const CircleAvatar(
                 radius: 26,
                 backgroundColor: Color(0xFF155DFC),
-                child: Icon(Icons.person, color: Colors.white, size: 28),
+                child:
+                Icon(Icons.person, color: Colors.white, size: 28),
               ),
               const SizedBox(width: 14),
               const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'John Doe',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF101828),
-                      ),
-                    ),
+                    Text('Task Owner',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF101828))),
                     SizedBox(height: 3),
-                    Text(
-                      '⭐ 4.7 (23 reviews)',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Color(0xFF4A5565),
-                      ),
-                    ),
-                    SizedBox(height: 3),
-                    Text(
-                      'Member since 2025',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Color(0xFF6A7282),
-                      ),
-                    ),
+                    Text('Member',
+                        style: TextStyle(
+                            fontSize: 13, color: Color(0xFF6A7282))),
                   ],
                 ),
               ),
@@ -271,8 +231,7 @@ class TaskDetailsScreen extends StatelessWidget {
                   foregroundColor: Colors.black,
                   side: const BorderSide(color: Color(0xFFE5E7EB)),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                      borderRadius: BorderRadius.circular(8)),
                 ),
               ),
             ],
@@ -283,7 +242,8 @@ class TaskDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildMapCard() {
-    final bool hasLocation = task.latitude != null && task.longitude != null;
+    final bool hasLocation =
+        task.latitude != null && task.longitude != null;
 
     return _card(
       child: Column(
@@ -292,10 +252,9 @@ class TaskDetailsScreen extends StatelessWidget {
           const Text(
             'Location Map',
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF101828),
-            ),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF101828)),
           ),
           const SizedBox(height: 16),
           Container(
@@ -305,10 +264,7 @@ class TaskDetailsScreen extends StatelessWidget {
               gradient: hasLocation
                   ? null
                   : const LinearGradient(
-                colors: [
-                  Color(0xFFDBEAFE),
-                  Color(0xFFF3E8FF),
-                ],
+                colors: [Color(0xFFDBEAFE), Color(0xFFF3E8FF)],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
               ),
@@ -324,7 +280,8 @@ class TaskDetailsScreen extends StatelessWidget {
               markers: {
                 Marker(
                   markerId: const MarkerId('task_location'),
-                  position: LatLng(task.latitude!, task.longitude!),
+                  position:
+                  LatLng(task.latitude!, task.longitude!),
                   infoWindow: InfoWindow(
                     title: task.title,
                     snippet: task.location,
@@ -337,19 +294,12 @@ class TaskDetailsScreen extends StatelessWidget {
                 : const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.location_on_outlined,
-                  size: 48,
-                  color: Color(0xFF9CA3AF),
-                ),
+                Icon(Icons.location_on_outlined,
+                    size: 48, color: Color(0xFF9CA3AF)),
                 SizedBox(height: 8),
-                Text(
-                  'Map view of job location',
-                  style: TextStyle(
-                    color: Color(0xFF4A5565),
-                    fontSize: 14,
-                  ),
-                ),
+                Text('Map view of job location',
+                    style: TextStyle(
+                        color: Color(0xFF4A5565), fontSize: 14)),
               ],
             ),
           ),
@@ -358,25 +308,57 @@ class TaskDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNeedsCard() {
+  /// Replaces the hardcoded "What You'll Need" card.
+  /// Shows the full task description so the seeker's own words are displayed.
+  Widget _buildDescriptionCard() {
     return _card(
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "What You'll Need",
+          const Text(
+            'Task Description',
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF101828),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF101828)),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            task.description,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Color(0xFF4A5565),
+              height: 1.6,
             ),
           ),
-          SizedBox(height: 16),
-          _BulletText('Bring your own supplies and equipment'),
-          SizedBox(height: 12),
-          _BulletText('Estimated duration: 3-4 hours'),
-          SizedBox(height: 12),
-          _BulletText('Experience in cleaning preferred'),
+          const SizedBox(height: 16),
+          // Category tag
+          Row(
+            children: [
+              const Icon(Icons.category_outlined,
+                  size: 16, color: Color(0xFF6A7282)),
+              const SizedBox(width: 6),
+              Text(
+                'Category: ${task.categoryId}',
+                style: const TextStyle(
+                    fontSize: 13, color: Color(0xFF6A7282)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          // Budget reminder
+          Row(
+            children: [
+              const Icon(Icons.attach_money,
+                  size: 16, color: Color(0xFF6A7282)),
+              const SizedBox(width: 6),
+              Text(
+                'Budget: \$${task.price.toStringAsFixed(2)}',
+                style: const TextStyle(
+                    fontSize: 13, color: Color(0xFF6A7282)),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -427,13 +409,9 @@ class TaskDetailsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF6A7282),
-                  ),
-                ),
+                Text(label,
+                    style: const TextStyle(
+                        fontSize: 12, color: Color(0xFF6A7282))),
                 const SizedBox(height: 3),
                 Text(
                   value,
@@ -449,39 +427,6 @@ class TaskDetailsScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _BulletText extends StatelessWidget {
-  final String text;
-
-  const _BulletText(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          '•',
-          style: TextStyle(
-            color: Color(0xFF155DFC),
-            fontSize: 18,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            text,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xFF4A5565),
-              height: 1.4,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

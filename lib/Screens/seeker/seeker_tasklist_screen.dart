@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../Controllers/task_controller.dart';
 import '../../Models/task_model.dart';
+import '../task_details_screen.dart';
 import 'post_task_screen.dart';
 
 //Task list screen that shows all available tasks that the user has made to the system.
@@ -45,21 +46,17 @@ class _TaskListScreenState extends State<TaskListScreen>
 
         final allTasks = snapshot.data ?? [];
 
-        final openTasks = allTasks
-            .where((task) => task.status == Status.open)
-            .toList();
+        final openTasks =
+        allTasks.where((task) => task.status == Status.open).toList();
 
-        final assignedTasks = allTasks
-            .where((task) => task.status == Status.assigned)
-            .toList();
+        final assignedTasks =
+        allTasks.where((task) => task.status == Status.assigned).toList();
 
-        final completedTasks = allTasks
-            .where((task) => task.status == Status.completed)
-            .toList();
+        final completedTasks =
+        allTasks.where((task) => task.status == Status.completed).toList();
 
-        final cancelledTasks = allTasks
-            .where((task) => task.status == Status.cancelled)
-            .toList();
+        final cancelledTasks =
+        allTasks.where((task) => task.status == Status.cancelled).toList();
 
         return Container(
           color: const Color(0xFFF3F4FB),
@@ -180,38 +177,82 @@ class _TaskListScreenState extends State<TaskListScreen>
 
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
-          child: ListTile(
-            title: Text(task.title),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(task.description),
-                const SizedBox(height: 4),
-                Text(
-                  'Posted: ${DateFormat('MMM dd, yyyy - hh:mm a').format(task.createdAt)}',
+          // FIX: wrap in InkWell so the whole card is tappable
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TaskDetailsScreen(task: task),
                 ),
-                Text(
-                  'Deadline: ${DateFormat('MMM dd, yyyy - hh:mm a').format(task.deadline)}',
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(4),
+              child: ListTile(
+                title: Text(
+                  task.title,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-              ],
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(task.description),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Posted: ${DateFormat('MMM dd, yyyy - hh:mm a').format(task.createdAt)}',
+                    ),
+                    Text(
+                      'Deadline: ${DateFormat('MMM dd, yyyy - hh:mm a').format(task.deadline)}',
+                    ),
+                  ],
+                ),
+                trailing: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    _statusBadge(task.status),
+                    const SizedBox(height: 4),
+                    const Icon(
+                      Icons.chevron_right,
+                      color: Colors.black38,
+                    ),
+                  ],
+                ),
+                isThreeLine: true,
+              ),
             ),
-            trailing: Text(_statusLabel(task.status)),
           ),
         );
       },
     );
   }
 
-  String _statusLabel(Status status) {
-    switch (status) {
-      case Status.open:
-        return 'Open';
-      case Status.assigned:
-        return 'Assigned';
-      case Status.completed:
-        return 'Completed';
-      case Status.cancelled:
-        return 'Cancelled';
-    }
+  Widget _statusBadge(Status status) {
+    final Map<Status, (String, Color)> styles = {
+      Status.open: ('Open', Colors.blue),
+      Status.assigned: ('Assigned', Colors.orange),
+      Status.completed: ('Completed', Colors.green),
+      Status.cancelled: ('Cancelled', Colors.red),
+    };
+
+    final (label, color) = styles[status]!;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: color,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
   }
 }

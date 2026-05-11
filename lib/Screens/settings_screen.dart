@@ -230,7 +230,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       value: value,
       onChanged: onChanged,
-      activeColor: const Color(0xFF2563EB),
+      activeThumbColor: const Color(0xFF2563EB),
     );
   }
 
