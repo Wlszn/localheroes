@@ -4,7 +4,7 @@ import '../../Controllers/task_controller.dart';
 import '../../Models/task_model.dart';
 import '../task_details_screen.dart';
 
-/// Shows all tasks the hero has currently accepted (status = assigned).
+/// Shows all tasks the hero has currently accepted
 /// The hero can mark them complete or release them back to open.
 class ScheduleScreen extends StatelessWidget {
   const ScheduleScreen({super.key});
@@ -111,7 +111,6 @@ class ScheduleScreen extends StatelessWidget {
   }
 }
 
-// ── Task card ─────────────────────────────────────────────────────────────────
 
 class _TaskCard extends StatelessWidget {
   final TaskModel task;

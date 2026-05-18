@@ -5,8 +5,6 @@ class UserController {
   final CollectionReference users =
   FirebaseFirestore.instance.collection('users');
 
-  // ---------------- COUNT METHODS ----------------
-
   Future<int> countAllUsers() async {
     final snapshot = await users.get();
     return snapshot.size;
@@ -21,7 +19,6 @@ class UserController {
     return snapshot.size;
   }
 
-  // ---------------- GET LISTS ----------------
 
   Future<List<UserModel>> getAllUsers() async {
     final snapshot = await users.get();
@@ -42,7 +39,6 @@ class UserController {
         .toList();
   }
 
-  // ---------------- APPROVE / REJECT ----------------
 
   Future<void> approveHero(String uid) async {
     await users.doc(uid).update({

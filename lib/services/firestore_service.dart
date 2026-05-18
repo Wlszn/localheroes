@@ -1,1 +1,0 @@
-//Fierbase database connection should be in this file

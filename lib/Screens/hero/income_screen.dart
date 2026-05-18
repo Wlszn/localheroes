@@ -44,7 +44,6 @@ class _IncomeBody extends StatelessWidget {
     required this.isLoading,
   });
 
-  // ── Computed stats ────────────────────────────────────────────────────────
 
   double get totalEarnings => completedTasks.fold(0, (sum, t) => sum + t.price);
 
@@ -127,8 +126,6 @@ class _IncomeBody extends StatelessWidget {
           .fold<double>(0, (sum, t) => sum + t.price);
     });
   }
-
-  // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -524,8 +521,6 @@ class _IncomeBody extends StatelessWidget {
     );
   }
 }
-
-// ── Chart painter ─────────────────────────────────────────────────────────────
 
 class _EarningsChartPainter extends CustomPainter {
   final List<double> data;

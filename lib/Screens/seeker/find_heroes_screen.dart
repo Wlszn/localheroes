@@ -19,7 +19,6 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
   GoogleMapController? _mapController;
   String _locationText = 'Loading location...';
 
-  // Null until GPS resolves — avoids the wrong-location jump
   LatLng? _currentPosition;
   bool _isLoadingLocation = true;
   bool _showListView = false;
@@ -35,7 +34,6 @@ class _FindHeroesScreenState extends State<FindHeroesScreen> {
     _listenToTasks();
   }
 
-  // ── Tasks ─────────────────────────────────────────────────────────────────
 
   void _listenToTasks() {
     _taskController.getAvailableTasks().listen((tasks) {

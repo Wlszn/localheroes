@@ -1,1 +1,0 @@
-//Firebase Authorization connection should be in this file change later to follow mvc design pattern
