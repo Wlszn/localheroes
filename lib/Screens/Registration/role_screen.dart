@@ -19,7 +19,8 @@ class Rolescreen extends StatelessWidget {
         backgroundColor: Colors.blue[300],
         automaticallyImplyLeading: false,
       ),
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
         children: [
           Center(child: Text('How would you like to use the platform?')),
           SizedBox(height: 20),
@@ -178,6 +179,7 @@ class Rolescreen extends StatelessWidget {
           ),
         ],
       ),
+      )
     );
   }
 }
